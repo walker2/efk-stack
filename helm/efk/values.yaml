@@ -1,0 +1,67 @@
+# Namespace for EFK stack to be deployed to  
+logNamespace: kube-logging
+
+# Number of replicas of elastic-search
+# If your cluster can allow, you really should use 3 replicas to avoid "split-brain" issue
+# To prevent election of several "split" masters
+replicaCount: 2
+
+# Creates local storage of logs 
+# For each replica of elsatic-search will be created a local-storage 
+storage:
+  name: my-local-storage
+  capacity: 10Gi
+  # PersistentVolumes local storage path. 
+  # Be sure that said folder exists on each node on cluster
+  # If you don't want to create folder manually on your cluster you can modify and use Ansible playbook
+  localPath: /mnt/disk/vol1
+  # List all nodes where local PersistentVolume should be provisioned
+  # Be sure number of nodes and replicas of elastic-search is same to guarantee resolution of PersistentVolumeClaims
+  nodes:
+    - node2
+    - node3
+
+# Elastic search is a log search engine 
+# By default we assume that elasticsearch uses local PersistentVolumes for log storage 
+elasticsearch:
+  # Change for your liking 
+  # There is also JAVA memory setting, which is not presented here 
+  limits:
+    cpu: 300m
+  requests:
+    cpu: 50m     
+  # We create headless elastic-search service, which returns all DNS records with app: elasticsearch
+  # Elastic-search uses two types of ports: REST API (to interact with Kibana for example), and inter-node ports to communicate between nodes
+  ports:
+    rest: 9200
+    internode: 9300
+
+# Kibana is data visualisation front-end 
+# To use user-interface you can find created kibana pod
+# And use port forwarding to gain access to it through browser
+# Example:  kubectl port-forward kibana-5cbc9db59f-nzlj2 5601:5601 -n kube-logging
+kibana:
+  port: 5601
+  replicas: 1
+  limits:
+    cpu: 300m
+  requests:
+    cpu: 50m
+
+# Fluentd is data-collector that is sitting on k8s nodes 
+fluentd:
+  limits:
+    memory: 512Mi
+  requests:
+    cpu: 100m
+    memory: 200Mi
+
+
+# Be careful with changing this values
+# Elasticsearch and kibana versions should be identical
+# ElasticSearchStatefulSet template uses cluster.initial_master_nodes setting, which is mandatory is 7.* version
+images:
+  elasticsearch: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
+  kibana: docker.elastic.co/kibana/kibana:7.2.0
+  fluentd: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
+
