@@ -1,0 +1,8 @@
+- hosts: nodes
+  sudo: yes
+  tasks:
+    - name: Transfer the script 
+      copy: src=create-folder.sh dest=/home/user mode=0777
+    
+    - name: Execute the script
+      command: sh /home/user/create-folder.sh

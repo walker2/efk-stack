@@ -1,0 +1,1 @@
+Creates necessary folders for local storage of logs

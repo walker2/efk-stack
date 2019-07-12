@@ -1,0 +1,7 @@
+[nodes]
+node1 ansible_host=192.168.8.172 ansible_user=user
+node2 ansible_host=192.168.8.173 ansible_user=user
+node3 ansible_host=192.168.8.174 ansible_user=user
+
+[all:vars]
+ansible_python_interpreter=/usr/bin/python
