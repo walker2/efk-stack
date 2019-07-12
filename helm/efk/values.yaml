@@ -1,13 +1,8 @@
 # Namespace for EFK stack to be deployed to  
 logNamespace: kube-logging
 
-# Number of replicas of elastic-search
-# If your cluster can allow, you really should use 3 replicas to avoid "split-brain" issue
-# To prevent election of several "split" masters
-replicaCount: 2
-
 # Creates local storage of logs 
-# For each replica of elsatic-search will be created a local-storage 
+# For each replica of elastic-search will be created a local-storage 
 storage:
   name: my-local-storage
   capacity: 10Gi
@@ -24,6 +19,10 @@ storage:
 # Elastic search is a log search engine 
 # By default we assume that elasticsearch uses local PersistentVolumes for log storage 
 elasticsearch:
+  # Number of replicas of elastic-search
+  # If your cluster can allow, you really should use 3 replicas to avoid "split-brain" issue
+  # To prevent election of several "split" masters
+  replicas: 2
   # Change for your liking 
   # There is also JAVA memory setting, which is not presented here 
   limits:
