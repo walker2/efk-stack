@@ -1,5 +1,5 @@
 - hosts: nodes
-  sudo: yes
+  become: true
   tasks:
     - name: Transfer the script 
       copy: src=create-folder.sh dest=/home/user mode=0777
