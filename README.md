@@ -58,7 +58,7 @@ kubectl create -f k8s/fluentd
 ## Usage 
 After installing we should check if everything is working correctly.
 
-First, be sure to check that there is no errors in kubernetes and every pod is functioning and running. 
+First, be sure to check that there are no errors in kubernetes and every pod is functioning and running. 
 
 For example, if you installed ELK Stack in ```kube-logging``` namespace, you can do this by running following command 
 ```bash
@@ -107,7 +107,7 @@ kubectl delete -f k8s/
 ```
 ## Chart configuration
 
-The following tables lists the configurable parameters of the efk chart and their default values.
+The following tables list the configurable parameters of the efk chart and their default values.
 ### Main
 
 | Parameter                      | Description                                                 | Default            |
