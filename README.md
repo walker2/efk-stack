@@ -21,9 +21,9 @@ If you are planning to use local ```PersistentVolumes``` for storage be sure to 
 ```bash
 ansible-playbook -i ansible/hosts ansible/create-folder.yml -K
 ```
-If you are planning to use metricbeat for infrastructure monitoring and you have Kubernetes v1.12 -- be sure to check that read-only port of kubelet on each node is open.[^1]
+If you are planning to use metricbeat for infrastructure monitoring and you have Kubernetes v1.12 -- be sure to check that read-only port of kubelet on each node is open.
 You can do this using provided ansible-playbook.
-[^1]: It's important to note that this practice can lead to security threats and should be avoided if possible in non-local clusters.
+> It's important to note that this practice can lead to security threats and should be avoided if possible in production clusters.
 
 ```bash
 ansible-playbook -i ansible/hosts ansible/open-kubelet-port.yml -K
@@ -147,9 +147,24 @@ The following tables list the configurable parameters of the efk chart and their
 | `fluentd.requests.cpu`         | Request of cpu usage of fluentd                             | `100m`             |
 | `fluentd.limits.memory`        | Request of memory usage of fluentd                          | `200Mi`            |
 
+### Metricbeat 
+| Parameter                      | Description                                                 | Default            |
+| -------------------------------| ------------------------------------------------------------| -------------------|
+| `stateMetric.enabled`          | Enable kube-state-metrics                                   | `true`             |
+| `stateMetric.replicas`         | Number of kube-state-metrics replicas                       | `2`                |
+| `stateMetric.ports.httpmetrics`| Port for http metrics                                       | `8080`             |
+| `stateMetric.ports.telemetry`  | Port for telemetry                                          | `8081`             |        
+| `metricbeat.enabled`           | Enable metricbeat                                           | `true`             |
+| `metricbeat.installOnMaster`   | Should be metricbeat installed on master node               | `true`             |
+| `metricbeat.limits.memory`     | Limit of memory usage by metricbeat                         | `200Mi`            |
+| `metricbeat.requests.cpu`      | Request of cpu usage of metricbeat                          | `100m`             |
+| `metricbeat.requests.memory`   | Request of memory usage of metricbeat                       | `100Mi`            |
+
 ### Images
 | Parameter                      | Description                                                 | Default            |
 | -------------------------------| ------------------------------------------------------------| -------------------|
 | `images.elasticsearch`         | Image of elastic-search                                     | `docker.elastic.co/elasticsearch/elasticsearch:7.2.0`|
 | `images.kibana`                | Image of kibana                                     | `docker.elastic.co/kibana/kibana:7.2.0`|
 | `images.fluentd`               | Image of fluentd                                     | `fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1`|
+| `images.stateMetric`               | Image of kube-state-metrics                                     | `quay.io/coreos/kube-state-metrics:v1.7.0`|
+| `images.metricbeat`               | Image of metricbeat                                     | `docker.elastic.co/beats/metricbeat:7.2.0`|
