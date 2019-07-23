@@ -1,0 +1,6 @@
+- hosts: nodes
+  become: true
+  tasks:
+    - name: Replace --read-only-port=0 to --read-only-port=10255
+      command: sed -i "s/--read-only-port=0/--read-only-port=10255" /etc/kubernetes/kubelet.env
+

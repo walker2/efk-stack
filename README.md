@@ -6,7 +6,7 @@ This repository contains necessary kubernetes manifests and helm charts for inst
 * ```kubectl``` or ```helm``` tool used for installation 
 
 ## Details
-Manifests and charts do following:
+Manifests and charts do the following:
 1. Create logging namespace
 2. Create local ```PersistentVolumes``` on nodes
 3. Configure and launch scalable Elasticsearch cluster using ```Services``` and ```SatefulSet```
@@ -15,12 +15,21 @@ Manifests and charts do following:
 
 
 ## Installing
-If you are planning to use local ```PersistentVolumes``` for storage be sure check that provided in chart/manifest folder exists on nodes. If not you can manually create them or use ansible playbook. 
+
+### Ansible prerequisites
+If you are planning to use local ```PersistentVolumes``` for storage be sure to check that provided in chart/manifest folder exists on nodes. If not, you can manually create them or use ansible-playbook. 
 ```bash
 ansible-playbook -i ansible/hosts ansible/create-folder.yml -K
 ```
+If you are planning to use metricbeat for infrastructure monitoring and you have Kubernetes v1.12 -- be sure to check that read-only port of kubelet on each node is open.[^1]
+You can do this using provided ansible-playbook.
+[^1]: It's important to note that this practice can lead to security threats and should be avoided if possible in non-local clusters.
 
-You can install EFK stack using either helm chart or manifests 
+```bash
+ansible-playbook -i ansible/hosts ansible/open-kubelet-port.yml -K
+```
+
+**You can install EFK stack using either helm chart or manifests**
 ### Chart
 To install the chart with release name efk
 ```bash
@@ -28,7 +37,7 @@ helm install helm/efk --name efk
 ```
 
 ### Manifests
-Manifests should be installed in certain order
+Manifests should be installed in a certain order
 
 Firstly create namespace
 ```bash
@@ -40,7 +49,6 @@ kubectl create -f k8s/local-pv
 ```
 
 Then install elasticsearch ```Service``` and ``StatefulSet``
-kubectl create -f k8s/elastic-search
 ```bash
 kubectl create -f k8s/elastic-search
 ```
@@ -53,6 +61,15 @@ kubectl create -f k8s/kibana
 And at last install fluentd
 ```bash
 kubectl create -f k8s/fluentd
+```
+**You can also install metricbeat for infrastructure monitoring**
+To do so, install kube-state-metrics
+```bash
+kubectl create -f k8s/kube-state-metric
+```
+And metricbeat on top of that
+```bash
+kubectl create -f k8s/metricbeat
 ```
 
 ## Usage 
@@ -86,9 +103,9 @@ green  open   logstash-2019.07.10  fOd3K8w_SnC-sWB1vbTwqQ   1   1       7014    
 green  open   logstash-2019.07.11  gi2_Im8fQkCQz1x5H04Phg   1   1     214894            0    115.9mb         56.5mb
 ```
 
-If everything checks out if now can login to the Kibana front-end using the same port-forwarding technique. 
+If everything checks out if now can log in to the Kibana front-end using the same port-forwarding technique. 
 ```bash
-kubectl port-forward [yours particular kibana pod name] 5601:5601 -n kube-logging
+kubectl port-forward [your particular kibana pod name] 5601:5601 -n kube-logging
 ```
 If everything is fine you can create new index pattern (try something like ```logstash-*```) and start working with EFK stack
 
