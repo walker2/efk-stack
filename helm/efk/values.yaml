@@ -55,6 +55,24 @@ fluentd:
     cpu: 100m
     memory: 200Mi
 
+# Service that listens to the k8s API server. Metricbeat requires it by default
+# You can disable it by setting enabled flag, but some metricbeat features won't work
+stateMetric:
+  enabled: true
+  replicas: 2
+  ports:
+    httpmetrics: 8080
+    telemetry: 8081
+
+metricbeat:
+  enabled: true
+  installOnMaster: true
+  limits:
+    memory: 200Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
 
 # Be careful with changing this values
 # Elasticsearch and kibana versions should be identical
@@ -63,4 +81,5 @@ images:
   elasticsearch: docker.elastic.co/elasticsearch/elasticsearch:7.2.0
   kibana: docker.elastic.co/kibana/kibana:7.2.0
   fluentd: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
-
+  stateMetric: quay.io/coreos/kube-state-metrics:v1.7.0
+  metricbeat: docker.elastic.co/beats/metricbeat:7.2.0

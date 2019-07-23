@@ -1,11 +1,12 @@
+{{- if .Values.metricbeat.enabled -}}
 ---
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: metricbeat-daemonset-config
-  namespace: kube-logging
+  namespace: {{ .Values.logNamespace }}
   labels:
-    k8s-app: metricbeat
+    app: metricbeat
 data:
   metricbeat.yml: |-
     metricbeat.config.modules:
@@ -21,7 +22,7 @@ data:
     cloud.auth: ${ELASTIC_CLOUD_AUTH}
 
     output.elasticsearch:
-      hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:9200}']
+      hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:{{.Values.elasticsearch.ports.rest}}}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
 ---
@@ -29,9 +30,9 @@ apiVersion: v1
 kind: ConfigMap
 metadata:
   name: metricbeat-daemonset-modules
-  namespace: kube-logging
+  namespace: {{ .Values.logNamespace }}
   labels:
-    k8s-app: metricbeat
+    app: metricbeat
 data:
   system.yml: |-
     - module: system
@@ -76,3 +77,4 @@ data:
       #bearer_token_file: /var/run/secrets/kubernetes.io/serviceaccount/token
       #ssl.certificate_authorities:
         #- /var/run/secrets/kubernetes.io/serviceaccount/service-ca.crt
+{{- end -}}

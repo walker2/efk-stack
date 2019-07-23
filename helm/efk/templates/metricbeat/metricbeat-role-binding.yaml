@@ -1,0 +1,15 @@
+{{- if .Values.metricbeat.enabled -}}
+apiVersion: rbac.authorization.k8s.io/v1beta1
+kind: ClusterRoleBinding
+metadata:
+  name: metricbeat
+  namespace: {{ .Values.logNamespace }}
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: ClusterRole
+  name: metricbeat
+subjects:
+- kind: ServiceAccount
+  name: metricbeat
+  namespace: {{ .Values.logNamespace }}
+{{- end -}}

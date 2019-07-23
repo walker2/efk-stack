@@ -1,0 +1,23 @@
+{{- if .Values.stateMetric.enabled -}}
+apiVersion: v1
+kind: Service
+metadata:
+  name: kube-state-metrics
+  namespace: {{ .Values.logNamespace }}
+  labels:
+    app: kube-state-metrics
+  annotations:
+    prometheus.io/scrape: 'true'
+spec:
+  ports:
+  - name: http-metrics
+    port: {{ .Values.stateMetric.ports.httpmetrics }}
+    targetPort: http-metrics
+    protocol: TCP
+  - name: telemetry
+    port:  {{ .Values.stateMetric.ports.telemetry }}
+    targetPort: telemetry
+    protocol: TCP
+  selector:
+    app: kube-state-metrics
+{{- end -}}
