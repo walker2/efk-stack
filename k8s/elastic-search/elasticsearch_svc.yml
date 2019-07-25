@@ -2,7 +2,7 @@ kind: Service
 apiVersion: v1
 metadata:
   name: elasticsearch
-  namespace: logging
+  namespace: kube-logging
   labels:
     app: elasticsearch
 spec:

@@ -2,7 +2,7 @@ apiVersion: v1
 kind: ServiceAccount
 metadata:
   name: fluentd
-  namespace: logging
+  namespace: kube-logging
   labels:
     app: fluentd
 ---
@@ -34,13 +34,13 @@ roleRef:
 subjects:
 - kind: ServiceAccount
   name: fluentd
-  namespace: logging
+  namespace: kube-logging
 ---
 apiVersion: apps/v1
 kind: DaemonSet
 metadata:
   name: fluentd
-  namespace: logging
+  namespace: kube-logging
   labels:
     app: fluentd
 spec:
@@ -62,7 +62,7 @@ spec:
         image: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
         env:
           - name:  FLUENT_ELASTICSEARCH_HOST
-            value: "elasticsearch.logging.svc.cluster.local"
+            value: "elasticsearch.kube-logging.svc.cluster.local"
           - name:  FLUENT_ELASTICSEARCH_PORT
             value: "9200"
           - name: FLUENT_ELASTICSEARCH_SCHEME
