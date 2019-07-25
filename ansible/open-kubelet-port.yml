@@ -3,4 +3,6 @@
   tasks:
     - name: Replace --read-only-port=0 to --read-only-port=10255
       command: sed -i "s/--read-only-port=0/--read-only-port=10255" /etc/kubernetes/kubelet.env
+    - name: Reboot machine to apply new kubelet settings 
+      reboot:
 
