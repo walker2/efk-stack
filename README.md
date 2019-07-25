@@ -62,7 +62,7 @@ And at last install fluentd
 ```bash
 kubectl create -f k8s/fluentd
 ```
-**You can also install metricbeat for infrastructure monitoring**
+#### You can also install metricbeat for infrastructure monitoring
 To do so, install kube-state-metrics
 ```bash
 kubectl create -f k8s/kube-state-metric
@@ -71,6 +71,13 @@ And metricbeat on top of that
 ```bash
 kubectl create -f k8s/metricbeat
 ```
+
+#### APM Server can be installed for collecting performance information from agents
+To do so just create apm-server manifest
+```bash
+kubectl create -f k8s/apm-server
+```
+> APM Server gets information from apm-agents, you can see usage examples of such agents and how to integrate them to Kubernetes at https://github.com/walker2/k8s-goapm-examples 
 
 ## Usage 
 After installing we should check if everything is working correctly.
