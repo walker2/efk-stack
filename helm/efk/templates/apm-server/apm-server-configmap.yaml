@@ -1,0 +1,34 @@
+{{- if .Values.apmserver.enabled -}}
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: apm-server-config
+  namespace: {{ .Values.logNamespace }}
+  labels:
+    app: apm-server
+data:
+  apm-server.yml: |-
+    apm-server:
+      host: "0.0.0.0:{{ .Values.apmserver.ports.container }}"
+      frontend:
+        enabled: false
+    setup.template.settings:
+      index:
+        number_of_shards: 1
+        codec: best_compression
+    output.elasticsearch:
+      hosts: ["elasticsearch:{{ .Values.elasticsearch.ports.rest }}"]
+      indices:
+        - index: "apm-%{[beat.version]}-sourcemap"
+          when.contains:
+            processor.event: "sourcemap"
+        - index: "apm-%{[beat.version]}-error-%{+yyyy.MM.dd}"
+          when.contains:
+            processor.event: "error"
+        - index: "apm-%{[beat.version]}-transaction-%{+yyyy.MM.dd}"
+          when.contains:
+            processor.event: "transaction"
+        - index: "apm-%{[beat.version]}-span-%{+yyyy.MM.dd}"
+          when.contains:
+            processor.event: "span"
+{{- end -}}

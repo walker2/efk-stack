@@ -73,6 +73,13 @@ metricbeat:
     cpu: 100m
     memory: 100Mi
 
+# Apm server accepts all application perfomance metric data from apm agents and sens it to elasticsearch
+apmserver:
+  enabled: true
+  replicas: 1
+  ports: 
+    container: 8200
+    http: 31000
 
 # Be careful with changing this values
 # Elasticsearch and kibana versions should be identical
@@ -83,3 +90,4 @@ images:
   fluentd: fluent/fluentd-kubernetes-daemonset:v1.4.2-debian-elasticsearch-1.1
   stateMetric: quay.io/coreos/kube-state-metrics:v1.7.0
   metricbeat: docker.elastic.co/beats/metricbeat:7.2.0
+  apmserver: docker.elastic.co/apm/apm-server:7.2.0

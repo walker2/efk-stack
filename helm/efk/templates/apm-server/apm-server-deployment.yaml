@@ -1,0 +1,32 @@
+{{- if .Values.apmserver.enabled -}}
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apm-server
+  namespace: {{ .Values.logNamespace }}
+spec:
+  replicas: {{ .Values.apmserver.replicas }}
+  selector:
+    matchLabels:
+      app: apm-server
+  template:
+    metadata:
+      labels:
+        app: apm-server
+    spec:
+      containers:
+      - name: apm-server
+        image: {{ .Values.images.apmserver }}
+        ports:
+        - containerPort: {{ .Values.apmserver.ports.container }}
+          name: apm-port
+        volumeMounts:
+        - name: apm-server-config
+          mountPath: /usr/share/apm-server/apm-server.yml
+          readOnly: true
+          subPath: apm-server.yml
+      volumes:
+      - name: apm-server-config
+        configMap:
+          name: apm-server-config
+{{- end -}}
