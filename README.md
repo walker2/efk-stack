@@ -72,6 +72,11 @@ And metricbeat on top of that
 kubectl create -f k8s/metricbeat
 ```
 
+#### To view current stream of logs filebeat should be installed 
+```bash
+kubectl create -f k8s/filebeat
+```
+
 #### APM Server can be installed for collecting performance information from agents
 To do so just create apm-server manifest
 ```bash
