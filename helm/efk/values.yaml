@@ -73,6 +73,15 @@ metricbeat:
     cpu: 100m
     memory: 100Mi
 
+# Filebeat allows to stream log files
+filebeat:
+  enabled: true
+  limits:
+    memory: 200Mi
+  requests:
+    cpu: 100m
+    memory: 100Mi
+
 # Apm server accepts all application perfomance metric data from apm agents and sens it to elasticsearch
 apmserver:
   enabled: true
@@ -80,6 +89,7 @@ apmserver:
   ports: 
     container: 8200
     http: 31000
+
 
 # Be careful with changing this values
 # Elasticsearch and kibana versions should be identical

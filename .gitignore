@@ -1,2 +1,4 @@
 TODO
 .vscode/
+k8s/ingress.yaml
+k8s/nginx-controller-values.yaml
