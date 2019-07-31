@@ -24,6 +24,11 @@ data:
       hosts: ['${ELASTICSEARCH_HOST:elasticsearch}:${ELASTICSEARCH_PORT:{{.Values.elasticsearch.ports.rest}}}']
       username: ${ELASTICSEARCH_USERNAME}
       password: ${ELASTICSEARCH_PASSWORD}
+    
+    setup.kibana:
+      host: ${KIBANA_HOST}
+
+    setup.dashboards.enabled: true
 ---
 apiVersion: v1
 kind: ConfigMap

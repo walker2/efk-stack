@@ -43,6 +43,8 @@ spec:
           value:
         - name: ELASTIC_CLOUD_AUTH
           value:
+        - name: KIBANA_HOST
+          value: "http://kibana:{{ .Values.kibana.port }}"
         - name: NODE_NAME
           valueFrom:
             fieldRef:
